@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معلومات الحاج</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* إعادة تعيين الخصائص الأساسية */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #f0f2f5, #e0e5ec);
+      direction: rtl;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+    }
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 70px;
+    }
+    .logo2 {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 70px;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #eee;
+      margin: 30px auto;
+      object-fit: cover;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 24px;
+    }
+    form div {
+      margin-bottom: 20px;
+      position: relative;
+      text-align: right;
+    }
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fafafa;
+      text-align: center;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #28a745;
+    }
+    .status .circle {
+      width: 15px;
+      height: 15px;
+      background: #28a745;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+    /* تعديل عنصر الحالة لتعرض الكلمات بشكل مناسب */
+    .health-status {
+      display: none;
+      min-width: 80px;
+      padding: 10px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 20px auto;
+      text-align: center;
+    }
+    .good {
+      background-color: #ffc107;
+      color: #333;
+    }
+    .very-good {
+      background-color: #fd7e14;
+    }
+    .excellent {
+      background-color: #28a745;
+    }
+    /* زر تعديل الحالة في زاوية القسم (أعلى يسار داخل الحاوية) */
+    .edit-status {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      padding: 4px 8px;
+      background-color: rgba(255,255,0,0.5); /* 50% شفافة */
+      color: #333;
+      font-size: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    /* زر الطوارئ داخل الإطار (زاوية الحاوية العليا اليمنى) */
+    .emergency-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+    }
+    /* صندوق رسالة الطوارئ (للحالة "جيد") */
+    .message-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid red;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 2000;
+      font-size: 18px;
+      text-align: center;
+      background: #fff;
+      color: red;
+    }
+    .message-box button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    /* رسالة التحذير لحالة "جيد جداً" داخل الإطار */
+    .warning-message {
+      border: 2px solid yellow;
+      background: #fff8dc;
+      color: goldenrod;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-top: 15px;
+      display: none;
+      text-align: center;
+    }
+    /* تحسين التجاوب مع الجوال */
+    @media screen and (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      input, select {
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- الصفحة الرئيسية -->
+  <div class="container" id="mainPage">
+    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341349488954048562/-----removebg-preview.png?ex=67d7f38f&is=67d6a20f&hm=0fdcea636dceb65508ee73e6f809059d2d4523028a69bc6097f3a5f1f14de170&" alt="الشعار" class="logo">
+    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341833929687081/OIP.jpg?ex=67d7ec6e&is=67d69aee&hm=669fa68c65fff7b9fc9f750af4f15ff59cff06abbe7caa1763f009cc4af51a65&" alt="شعار الكلية" class="logo2">
+    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341821111894058/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector.jpg?ex=67d7ec6b&is=67d69aeb&hm=f663946a7dfb63b9b69587b6f568fc05a1bdcaf09e65d51ef857fb31c8beda3a&" alt="صورة الحاج" class="profile-pic">
+    <h2>معلومات الحاج</h2>
+    <form>
+      <div>
+        <label>الاسم:</label>
+        <input type="text" value="محمد عبدالقاسم إقبال" readonly>
+      </div>
+      <div>
+        <label>العمر:</label>
+        <input type="number" value="47" readonly>
+      </div>
+      <div>
+        <label>الجنسية:</label>
+        <input type="text" value="السودان" readonly>
+      </div>
+      <div>
+        <label>الميلاد:</label>
+        <input type="text" value="1399/3/5" readonly>
+      </div>
+    </form>
+    <div class="status">
+      <span class="circle"></span>
+      مصرح به
+    </div>
+    <button class="btn" onclick="togglePages()">المزيد من المعلومات</button>
+  </div>
+  <!-- الصفحة الإضافية -->
+  <div class="container" id="infoPage" style="display: none;">
+    <button id="emergencyBtn" class="emergency-btn" onclick="emergencyClicked()">طوارئ</button>
+    <h2>تفاصيل إضافية عن الحاج</h2>
+    <form>
+      <div>
+        <label>رقم جواز السفر:</label>
+        <input type="text" value="A12345678" readonly>
+      </div>
+      <div>
+        <label>مكان الإقامة:</label>
+        <input type="text" value="مكة المكرمة - فندق النور" readonly>
+      </div>
+      <div>
+        <label>الحالة الصحية:</label>
+        <select id="healthStatus" onchange="setHealthStatus()">
+          <option value="">اختر الحالة</option>
+          <option value="good">سيئة</option>
+          <option value="very-good">ينبغي المتابعة</option>
+          <option value="excellent">ممتازة </option>
+        </select>
+        <div id="healthStatusDisplay" class="health-status"></div>
+        <span class="edit-status" onclick="resetHealthStatus()">الحالة</span>
+      </div>
+    </form>
+    <div id="warningMessage" class="warning-message"></div>
+    <button class="btn" onclick="togglePages()">العودة إلى الصفحة الرئيسية</button>
+  </div>
+  <!-- صندوق رسالة الطوارئ (للحالة "جيد") -->
+  <div id="messageBox" class="message-box">
+    <p id="messageText">تم ارسال حالة الطوارئ الى العمليات الخاصة , نشكركم لتعاونكم</p>
+    <button onclick="closeMessageBox()">اغلاق</button>
+  </div>
+  <script>
+    function togglePages() {
+      var mainPage = document.getElementById("mainPage");
+      var infoPage = document.getElementById("infoPage");
+      if (mainPage.style.display !== "none") {
+        mainPage.style.display = "none";
+        infoPage.style.display = "block";
+      } else {
+        mainPage.style.display = "block";
+        infoPage.style.display = "none";
+      }
+    }
+    function setHealthStatus() {
+      var select = document.getElementById("healthStatus");
+      var statusValue = select.value;
+      var display = document.getElementById("healthStatusDisplay");
+      var emergencyBtn = document.getElementById("emergencyBtn");
+      var warningMessage = document.getElementById("warningMessage");
+      var messageBox = document.getElementById("messageBox");
+      var messageText = document.getElementById("messageText");
+      if (statusValue) {
+        display.className = "health-status " + statusValue;
+        display.textContent = select.options[select.selectedIndex].text;
+        display.style.display = "block";
+        select.style.display = "none";
+        if (statusValue === "good") {
+          emergencyBtn.style.display = "block";
+          warningMessage.style.display = "none";
+          messageBox.style.display = "none";
+        } else if (statusValue === "very-good") {
+          emergencyBtn.style.display = "none";
+          warningMessage.innerText = "تنبيه: يُرجى مراجعة الحالة الصحية بدقة والتحقق من سلامتها لضمان اتخاذ الإجراءات المناسبة.";
+          warningMessage.style.display = "block";
+          messageBox.style.display = "none";
+        } else {
+          emergencyBtn.style.display = "none";
+          warningMessage.style.display = "none";
+          messageBox.style.display = "none";
+        }
+      }
+    }
+    function resetHealthStatus() {
+      var select = document.getElementById("healthStatus");
+      var display = document.getElementById("healthStatusDisplay");
+      select.style.display = "block";
+      select.value = "";
+      display.style.display = "none";
+      document.getElementById("emergencyBtn").style.display = "none";
+      document.getElementById("warningMessage").style.display = "none";
+      document.getElementById("messageBox").style.display = "none";
+    }
+    function emergencyClicked() {
+      var messageBox = document.getElementById("messageBox");
+      var messageText = document.getElementById("messageText");
+      messageBox.className = "message-box";
+      messageText.textContent = "تم ارسال حالة الطوارئ الى العمليات الخاصة , نشكركم لتعاونكم";
+      messageBox.style.display = "block";
+    }
+    function closeMessageBox() {
+      document.getElementById("messageBox").style.display = "none";
+    }
+  </script>
+</body>
+</html>
