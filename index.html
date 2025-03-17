@@ -116,7 +116,7 @@
     .btn:hover {
       background: #0056b3;
     }
-    /* تعديل عنصر الحالة لتعرض الكلمات بشكل مناسب */
+    /* عنصر الحالة لتوضيح كلمة الحالة */
     .health-status {
       display: none;
       min-width: 80px;
@@ -138,7 +138,7 @@
     .excellent {
       background-color: #28a745;
     }
-    /* زر تعديل الحالة في زاوية القسم (أعلى يسار داخل الحاوية) */
+    /* زر الحالة في الزاوية العليا اليسرى داخل الحاوية */
     .edit-status {
       position: absolute;
       left: 5px;
@@ -202,6 +202,31 @@
       display: none;
       text-align: center;
     }
+    /* تنسيق لحقل "مكان الإقامة" بدون الصورة داخل النموذج */
+    .field {
+      margin-bottom: 20px;
+    }
+    /* تنسيق لحاوية الحملة التي ستظهر خارج النموذج */
+    .campaign-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .campaign-link {
+      display: inline-block;
+    }
+    .campaign-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .campaign-text {
+      font-size: 14px;
+      color: #007bff;
+      vertical-align: middle;
+    }
     /* تحسين التجاوب مع الجوال */
     @media screen and (max-width: 600px) {
       .container {
@@ -225,24 +250,24 @@
 <body>
   <!-- الصفحة الرئيسية -->
   <div class="container" id="mainPage">
-    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341349488954048562/-----removebg-preview.png?ex=67d7f38f&is=67d6a20f&hm=0fdcea636dceb65508ee73e6f809059d2d4523028a69bc6097f3a5f1f14de170&" alt="الشعار" class="logo">
-    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341833929687081/OIP.jpg?ex=67d7ec6e&is=67d69aee&hm=669fa68c65fff7b9fc9f750af4f15ff59cff06abbe7caa1763f009cc4af51a65&" alt="شعار الكلية" class="logo2">
-    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341821111894058/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector.jpg?ex=67d7ec6b&is=67d69aeb&hm=f663946a7dfb63b9b69587b6f568fc05a1bdcaf09e65d51ef857fb31c8beda3a&" alt="صورة الحاج" class="profile-pic">
+    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341349488954048562/-----removebg-preview.png?ex=67d9450f&is=67d7f38f&hm=5957bc503ec6b55fa78293049ccf4a1750ea3ab59536d7563ca55a9d3d1d36e6&" alt="الشعار" class="logo">
+    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341833929687081/OIP.jpg?ex=67d93dee&is=67d7ec6e&hm=1494096d51b7ddfefcf4dfaa0f6f18d148ef256df9ce34bd0b174c98339dd1bd&" alt="شعار الكلية" class="logo2">
+    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341821111894058/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector.jpg?ex=67d93deb&is=67d7ec6b&hm=67704ade9f77c127815db32a5230dc66925676b107b78f62f67eba142b05512a&" alt="صورة الحاج" class="profile-pic">
     <h2>معلومات الحاج</h2>
     <form>
-      <div>
+      <div class="field">
         <label>الاسم:</label>
         <input type="text" value="محمد عبدالقاسم إقبال" readonly>
       </div>
-      <div>
+      <div class="field">
         <label>العمر:</label>
         <input type="number" value="47" readonly>
       </div>
-      <div>
+      <div class="field">
         <label>الجنسية:</label>
         <input type="text" value="السودان" readonly>
       </div>
-      <div>
+      <div class="field">
         <label>الميلاد:</label>
         <input type="text" value="1399/3/5" readonly>
       </div>
@@ -258,26 +283,35 @@
     <button id="emergencyBtn" class="emergency-btn" onclick="emergencyClicked()">طوارئ</button>
     <h2>تفاصيل إضافية عن الحاج</h2>
     <form>
-      <div>
+      <div class="field">
         <label>رقم جواز السفر:</label>
         <input type="text" value="A12345678" readonly>
       </div>
-      <div>
+      <div class="field">
         <label>مكان الإقامة:</label>
         <input type="text" value="مكة المكرمة - فندق النور" readonly>
       </div>
-      <div>
+      <div class="field">
+        <label>الحمله الراعيه:</label>
+        <input type="text" value="حملة النخبه للحج" readonly>
+      </div>
+      <div class="field">
         <label>الحالة الصحية:</label>
         <select id="healthStatus" onchange="setHealthStatus()">
           <option value="">اختر الحالة</option>
-          <option value="good">سيئة</option>
-          <option value="very-good">ينبغي المتابعة</option>
-          <option value="excellent">ممتازة </option>
+          <option value="good">جيد</option>
+          <option value="very-good">جيد جداً</option>
+          <option value="excellent">ممتاز</option>
         </select>
         <div id="healthStatusDisplay" class="health-status"></div>
         <span class="edit-status" onclick="resetHealthStatus()">الحالة</span>
       </div>
     </form>
+    <!-- تظهر هنا صورة الحملة والنص فوق زر العودة -->
+    <div class="campaign-container">
+      <a href="https://maps.app.goo.gl/qYSHTyKLQ9TNXehY8" target="_blank" class="campaign-link">
+        <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1351144139416142017/OIP.jpg?ex=67d94e89&is=67d7fd09&hm=ab2da56443b397479d7e414554f3e618fc4d7e22d787d4a4f76644a4b16ed16b&" alt="الحملة" class="campaign-img">
+    </div>
     <div id="warningMessage" class="warning-message"></div>
     <button class="btn" onclick="togglePages()">العودة إلى الصفحة الرئيسية</button>
   </div>
@@ -305,7 +339,6 @@
       var emergencyBtn = document.getElementById("emergencyBtn");
       var warningMessage = document.getElementById("warningMessage");
       var messageBox = document.getElementById("messageBox");
-      var messageText = document.getElementById("messageText");
       if (statusValue) {
         display.className = "health-status " + statusValue;
         display.textContent = select.options[select.selectedIndex].text;
