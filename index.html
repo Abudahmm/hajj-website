@@ -1,385 +1,286 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>معلومات الحاج</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* إعادة تعيين الخصائص الأساسية */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #f0f2f5, #e0e5ec);
-      direction: rtl;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      position: relative;
-    }
-    .container {
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      padding: 40px 30px;
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-      position: relative;
-      margin-bottom: 30px;
-    }
-    .logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      width: 70px;
-    }
-    .logo2 {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 70px;
-    }
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 4px solid #eee;
-      margin: 30px auto;
-      object-fit: cover;
-    }
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
-      font-size: 24px;
-    }
-    form div {
-      margin-bottom: 20px;
-      position: relative;
-      text-align: right;
-    }
-    label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 5px;
-      color: #555;
-    }
-    input, select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fafafa;
-      text-align: center;
-      transition: all 0.3s ease;
-      font-size: 16px;
-    }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #007bff;
-    }
-    .status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 20px 0;
-      font-size: 18px;
-      font-weight: 700;
-      color: #28a745;
-    }
-    .status .circle {
-      width: 15px;
-      height: 15px;
-      background: #28a745;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 12px 30px;
-      margin-top: 20px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      background: #007bff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .btn:hover {
-      background: #0056b3;
-    }
-    /* عنصر الحالة لتوضيح كلمة الحالة */
-    .health-status {
-      display: none;
-      min-width: 80px;
-      padding: 10px;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      margin: 20px auto;
-      text-align: center;
-    }
-    .good {
-      background-color: #ffc107;
-      color: #333;
-    }
-    .very-good {
-      background-color: #fd7e14;
-    }
-    .excellent {
-      background-color: #28a745;
-    }
-    /* زر الحالة في الزاوية العليا اليسرى داخل الحاوية */
-    .edit-status {
-      position: absolute;
-      left: 5px;
-      top: 5px;
-      padding: 4px 8px;
-      background-color: rgba(255,255,0,0.5); /* 50% شفافة */
-      color: #333;
-      font-size: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    /* زر الطوارئ داخل الإطار (زاوية الحاوية العليا اليمنى) */
-    .emergency-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      display: none;
-      z-index: 1000;
-    }
-    /* صندوق رسالة الطوارئ (للحالة "جيد") */
-    .message-box {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 2px solid red;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      display: none;
-      z-index: 2000;
-      font-size: 18px;
-      text-align: center;
-      background: #fff;
-      color: red;
-    }
-    .message-box button {
-      margin-top: 10px;
-      padding: 5px 10px;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    /* رسالة التحذير لحالة "جيد جداً" داخل الإطار */
-    .warning-message {
-      border: 2px solid yellow;
-      background: #fff8dc;
-      color: goldenrod;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 16px;
-      margin-top: 15px;
-      display: none;
-      text-align: center;
-    }
-    /* تنسيق لحقل "مكان الإقامة" بدون الصورة داخل النموذج */
-    .field {
-      margin-bottom: 20px;
-    }
-    /* تنسيق لحاوية الحملة التي ستظهر خارج النموذج */
-    .campaign-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 20px;
-    }
-    .campaign-link {
-      display: inline-block;
-    }
-    .campaign-img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-    .campaign-text {
-      font-size: 14px;
-      color: #007bff;
-      vertical-align: middle;
-    }
-    /* تحسين التجاوب مع الجوال */
-    @media screen and (max-width: 600px) {
-      .container {
-        padding: 20px;
-        margin-bottom: 20px;
-      }
-      h2 {
-        font-size: 22px;
-      }
-      .btn {
-        padding: 10px 20px;
-        font-size: 14px;
-      }
-      input, select {
-        padding: 10px;
-        font-size: 14px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معلومات الحاج</title>
+    <style>
+        body {
+            font-family: 'Tahoma', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            min-height: 100vh; /* Ensure body takes at least full height */
+        }
+        .logos-container {
+            width: 100%;
+            background-color: #ffffff;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #dee2e6;
+            gap: 40px;
+            box-sizing: border-box;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        .logos-container img {
+            height: 50px; max-width: 150px; object-fit: contain;
+        }
+        .content-container {
+            background-color: #ffffff;
+            padding: 25px; /* Slightly reduced padding */
+            margin: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 750px; /* Max width for content */
+            box-sizing: border-box;
+            text-align: right;
+            flex-grow: 1; /* Allow content to grow if needed */
+        }
+        h1 {
+            text-align: center; color: #333; margin-bottom: 25px; font-size: 1.8em;
+        }
+
+        /* Pilgrim Info Layout */
+        .pilgrim-info-layout {
+             display: flex;
+             align-items: flex-start;
+             gap: 25px;
+             margin-bottom: 20px;
+        }
+        .pilgrim-photo-container {
+             flex-shrink: 0;
+             text-align: center;
+        }
+        .pilgrim-photo {
+            display: block; width: 130px; height: 130px; /* Slightly smaller */
+            border-radius: 50%; object-fit: cover; margin: 0 auto 10px auto;
+            border: 4px solid #dee2e6; background-color: #eee;
+        }
+        .pilgrim-name-header { /* Specific style for name under photo */
+             font-size: 1.4em; font-weight: bold; color: #333; margin-bottom: 15px;
+        }
+
+        /* Details Sections */
+        .details-section-container { flex-grow: 1; } /* Takes remaining space */
+
+        #info-panel-basic-details, #info-panel-additional-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px 20px;
+        }
+        #info-panel-additional-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+        #info-panel-basic-details p, #info-panel-additional-details p {
+            margin: 2px 0; font-size: 1em; color: #333;
+            border-bottom: 1px dotted #eee; padding-bottom: 4px;
+        }
+        #info-panel-basic-details strong, #info-panel-additional-details strong {
+            display: inline-block; min-width: 110px; /* Adjust label width */
+            color: #0056b3; margin-left: 8px;
+        }
+        .location-link { color: #0066cc; text-decoration: none; }
+        .location-link:hover { text-decoration: underline; }
+
+        /* Buttons */
+        .button-container { text-align: center; margin-top: 20px; }
+        .info-page-button {
+            padding: 10px 20px; background-color: #5a6268; color: white; border: none;
+            border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: bold;
+            transition: background-color 0.2s ease; margin: 5px; display: inline-block;
+        }
+        .info-page-button:hover { background-color: #495057; }
+        #emergency-button { background-color: #e74c3c; font-size: 1.1em; padding: 12px 25px; }
+        #emergency-button:hover { background-color: #c0392b; }
+
+        /* --- Custom Alert Modal (Copied from Control Panel) --- */
+        #custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        #custom-alert-box { background-color: #fff; padding: 30px 40px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); text-align: center; max-width: 80%; width: 400px; }
+        #custom-alert-message { font-size: 1.4em; color: #333; margin-bottom: 25px; line-height: 1.5; }
+        #custom-alert-close-button { padding: 10px 25px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: bold; transition: background-color 0.2s ease; }
+        #custom-alert-close-button:hover { background-color: #0056b3; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+             .pilgrim-info-layout { flex-direction: column; align-items: center; } /* Stack photo and details */
+             .pilgrim-photo-container { margin-bottom: 20px; }
+             .details-section-container { width: 100%; } /* Allow details to take full width */
+        }
+        @media (max-width: 600px) {
+            .logos-container img { height: 40px; }
+            .content-container { margin: 15px; padding: 15px; }
+            h1 { font-size: 1.5em; }
+            .pilgrim-photo { width: 100px; height: 100px; }
+            .pilgrim-name-header { font-size: 1.2em; }
+            #info-panel-basic-details, #info-panel-additional-details { grid-template-columns: 1fr; /* Single column */ gap: 5px 10px; }
+            #info-panel-basic-details p, #info-panel-additional-details p { font-size: 0.95em; }
+            #info-panel-basic-details strong, #info-panel-additional-details strong { min-width: 90px; }
+            .info-page-button { font-size: 0.9em; padding: 8px 15px; }
+            #emergency-button { font-size: 1em; padding: 10px 20px; }
+            #custom-alert-box { width: 90%; padding: 20px; }
+            #custom-alert-message { font-size: 1.2em; }
+            #custom-alert-close-button { font-size: 0.9em; padding: 8px 18px;}
+        }
+
+    </style>
 </head>
 <body>
-  <!-- الصفحة الرئيسية -->
-  <div class="container" id="mainPage">
-    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341349488954048562/-----removebg-preview.png?ex=67d9450f&is=67d7f38f&hm=5957bc503ec6b55fa78293049ccf4a1750ea3ab59536d7563ca55a9d3d1d36e6&" alt="الشعار" class="logo">
-    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341833929687081/OIP.jpg?ex=67d93dee&is=67d7ec6e&hm=1494096d51b7ddfefcf4dfaa0f6f18d148ef256df9ce34bd0b174c98339dd1bd&" alt="شعار الكلية" class="logo2">
-    <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1341341821111894058/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector.jpg?ex=67d93deb&is=67d7ec6b&hm=67704ade9f77c127815db32a5230dc66925676b107b78f62f67eba142b05512a&" alt="صورة الحاج" class="profile-pic">
-    <h2>معلومات الحاج</h2>
-    <form>
-      <div class="field">
-        <label>الاسم:</label>
-        <input type="text" value="محمد عبدالقاسم إقبال" readonly>
-      </div>
-      <div class="field">
-        <label>العمر:</label>
-        <input type="number" value="47" readonly>
-      </div>
-      <div class="field">
-        <label>الجنسية:</label>
-        <input type="text" value="السودان" readonly>
-      </div>
-      <div class="field">
-        <label>الميلاد:</label>
-        <input type="text" value="1399/3/5" readonly>
-      </div>
-    </form>
-    <div class="status">
-      <span class="circle"></span>
-      مصرح به
+    <!-- Logos Section -->
+    <div class="logos-container">
+         <img src="https://cdn.discordapp.com/attachments/860307816837546024/1358016916106776757/hajj-icon.png?ex=67f643cf&is=67f4f24f&hm=e67334eb1046c4c0d33879b59fa25de3e1e4c460d6be52c1be06d58a3332e31d&" alt="شعار الحج والعمرة">
+         <img src="https://cdn.discordapp.com/attachments/860307816837546024/1358016924058910821/kfsc.jpg?ex=67f643d1&is=67f4f251&hm=fe6c695a3af856e20299dbde56e54070dba47d28815f4caceca6a6e5b996c104&" alt="شعار مركز الملك سلمان">
     </div>
-    <button class="btn" onclick="togglePages()">المزيد من المعلومات</button>
-  </div>
-  <!-- الصفحة الإضافية -->
-  <div class="container" id="infoPage" style="display: none;">
-    <button id="emergencyBtn" class="emergency-btn" onclick="emergencyClicked()">طوارئ</button>
-    <h2>تفاصيل إضافية عن الحاج</h2>
-    <form>
-      <div class="field">
-        <label>رقم جواز السفر:</label>
-        <input type="text" value="A12345678" readonly>
-      </div>
-      <div class="field">
-        <label>مكان الإقامة:</label>
-        <input type="text" value="مكة المكرمة - فندق النور" readonly>
-      </div>
-      <div class="field">
-        <label>الحمله الراعيه:</label>
-        <input type="text" value="حملة النخبه للحج" readonly>
-      </div>
-      <div class="field">
-        <label>الحالة الصحية:</label>
-        <select id="healthStatus" onchange="setHealthStatus()">
-          <option value="">اختر الحالة</option>
-          <option value="good">جيد</option>
-          <option value="very-good">جيد جداً</option>
-          <option value="excellent">ممتاز</option>
-        </select>
-        <div id="healthStatusDisplay" class="health-status"></div>
-        <span class="edit-status" onclick="resetHealthStatus()">الحالة</span>
-      </div>
-    </form>
-    <!-- تظهر هنا صورة الحملة والنص فوق زر العودة -->
-    <div class="campaign-container">
-      <a href="https://maps.app.goo.gl/qYSHTyKLQ9TNXehY8" target="_blank" class="campaign-link">
-        <img src="https://cdn.discordapp.com/attachments/1268312158123327572/1351144139416142017/OIP.jpg?ex=67d94e89&is=67d7fd09&hm=ab2da56443b397479d7e414554f3e618fc4d7e22d787d4a4f76644a4b16ed16b&" alt="الحملة" class="campaign-img">
+
+    <div class="content-container">
+        <h1>معلومات الحاج</h1>
+
+        <div class="pilgrim-info-layout">
+            <div class="pilgrim-photo-container">
+                <!-- !! IMPORTANT: Replace src with the actual URL for the specific pilgrim !! -->
+                <img src="https://i.pravatar.cc/150?img=1" alt="صورة الحاج" class="pilgrim-photo" id="pilgrim-photo-detail">
+                <!-- Name moved under photo -->
+                <span class="pilgrim-name-header" id="pilgrim-name-h">صالح الغامدي</span>
+                 <!-- Emergency button moved under photo/name -->
+                 <div class="button-container">
+                     <button id="emergency-button" class="info-page-button">نداء طوارئ</button>
+                </div>
+            </div>
+
+            <div class="details-section-container">
+                 <!-- === Basic Info Section === -->
+                 <div id="info-panel-basic-details">
+                    <!-- !! IMPORTANT: Replace ALL placeholder text below with the COPIED data for the specific Pilgrim from control-panel.html console log !! -->
+                    <p><strong>المعرف:</strong> <span id="pilgrim-id">P1002</span></p>
+                    <p><strong>حالة التصريح:</strong> <span id="permit-status">مصرح</span></p>
+                    <p><strong>الجنسية:</strong> <span id="pilgrim-nationality">سعودي</span></p>
+                    <p><strong>العمر:</strong> <span id="pilgrim-age">45</span></p>
+                    <p><strong>الجنس:</strong> <span id="pilgrim-gender">ذكر</span></p>
+                    <p><strong>رقم الجوال:</strong> <span id="phone-number">0512345678</span></p>
+                    <p><strong>مشاكل صحية:</strong> <span id="medical-history">سكري النوع الثاني</span></p>
+                    <p><strong>الموقع الحالي:</strong> <span id="coordinates">21.41950, 39.88880</span></p> <!-- Will be replaced by JS -->
+                </div>
+
+                <!-- Toggle Button -->
+                <div class="button-container" id="toggle-info-button-container">
+                     <button id="toggle-info-button" class="info-page-button">المزيد من المعلومات</button>
+                </div>
+
+                 <!-- === Additional Info Section (Initially Hidden) === -->
+                <div id="info-panel-additional-details" style="display: none;">
+                    <p><strong>رقم الجواز:</strong> <span id="passport-number">XQ9876543</span></p>
+                    <p><strong>رقم الهوية/الإقامة:</strong> <span id="national-id">1098765432</span></p>
+                    <p><strong>تاريخ انتهاء الجواز:</strong> <span id="passport-expiry">١٥/‏٥/‏٢٠٢٨</span></p>
+                    <p><strong>رقم التصريح:</strong> <span id="permit-number">H12345678</span></p>
+                    <p><strong>اسم الفندق:</strong> <span id="hotel-name">برج ساعة مكة الملكي فيرمونت</span></p>
+                    <p><strong>اسم الحملة:</strong> <span id="campaign-name">حملة الراجحي</span></p>
+                    <p><strong>رقم جوال للطوارئ:</strong> <span id="emergency-phone">0587654321</span></p>
+                    <p><strong>السجل الجنائي:</strong> <span id="criminal-record">لا يوجد</span></p>
+                    <p><strong>جهة القدوم:</strong> <span id="arrival-point">مطار الملك عبدالعزيز الدولي</span></p>
+                    <p><strong>تاريخ الوصول:</strong> <span id="arrival-date">٥/‏٦/‏٢٠٢٤</span></p>
+                    <p><strong>تاريخ المغادرة:</strong> <span id="departure-date">٢٥/‏٦/‏٢٠٢٤</span></p>
+                </div>
+            </div>
+        </div> <!-- End pilgrim-info-layout -->
+
+    </div> <!-- End content-container -->
+
+    <!-- Custom Alert Modal Structure -->
+    <div id="custom-alert-overlay">
+        <div id="custom-alert-box">
+            <p id="custom-alert-message">الرسالة هنا</p>
+            <button id="custom-alert-close-button">إغلاق</button>
+        </div>
     </div>
-    <div id="warningMessage" class="warning-message"></div>
-    <button class="btn" onclick="togglePages()">العودة إلى الصفحة الرئيسية</button>
-  </div>
-  <!-- صندوق رسالة الطوارئ (للحالة "جيد") -->
-  <div id="messageBox" class="message-box">
-    <p id="messageText">تم ارسال حالة الطوارئ الى العمليات الخاصة , نشكركم لتعاونكم</p>
-    <button onclick="closeMessageBox()">اغلاق</button>
-  </div>
-  <script>
-    function togglePages() {
-      var mainPage = document.getElementById("mainPage");
-      var infoPage = document.getElementById("infoPage");
-      if (mainPage.style.display !== "none") {
-        mainPage.style.display = "none";
-        infoPage.style.display = "block";
-      } else {
-        mainPage.style.display = "block";
-        infoPage.style.display = "none";
-      }
-    }
-    function setHealthStatus() {
-      var select = document.getElementById("healthStatus");
-      var statusValue = select.value;
-      var display = document.getElementById("healthStatusDisplay");
-      var emergencyBtn = document.getElementById("emergencyBtn");
-      var warningMessage = document.getElementById("warningMessage");
-      var messageBox = document.getElementById("messageBox");
-      if (statusValue) {
-        display.className = "health-status " + statusValue;
-        display.textContent = select.options[select.selectedIndex].text;
-        display.style.display = "block";
-        select.style.display = "none";
-        if (statusValue === "good") {
-          emergencyBtn.style.display = "block";
-          warningMessage.style.display = "none";
-          messageBox.style.display = "none";
-        } else if (statusValue === "very-good") {
-          emergencyBtn.style.display = "none";
-          warningMessage.innerText = "تنبيه: يُرجى مراجعة الحالة الصحية بدقة والتحقق من سلامتها لضمان اتخاذ الإجراءات المناسبة.";
-          warningMessage.style.display = "block";
-          messageBox.style.display = "none";
-        } else {
-          emergencyBtn.style.display = "none";
-          warningMessage.style.display = "none";
-          messageBox.style.display = "none";
-        }
-      }
-    }
-    function resetHealthStatus() {
-      var select = document.getElementById("healthStatus");
-      var display = document.getElementById("healthStatusDisplay");
-      select.style.display = "block";
-      select.value = "";
-      display.style.display = "none";
-      document.getElementById("emergencyBtn").style.display = "none";
-      document.getElementById("warningMessage").style.display = "none";
-      document.getElementById("messageBox").style.display = "none";
-    }
-    function emergencyClicked() {
-      var messageBox = document.getElementById("messageBox");
-      var messageText = document.getElementById("messageText");
-      messageBox.className = "message-box";
-      messageText.textContent = "تم ارسال حالة الطوارئ الى العمليات الخاصة , نشكركم لتعاونكم";
-      messageBox.style.display = "block";
-    }
-    function closeMessageBox() {
-      document.getElementById("messageBox").style.display = "none";
-    }
-  </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const emergencyButton = document.getElementById('emergency-button');
+            const pilgrimNameElement = document.getElementById('pilgrim-name-h'); // Get name from header span
+            const pilgrimName = pilgrimNameElement ? pilgrimNameElement.textContent.trim() : 'الحاج المحدد'; // Get name for alert
+
+            const toggleInfoButton = document.getElementById('toggle-info-button');
+            const additionalDetails = document.getElementById('info-panel-additional-details');
+
+            const customAlertOverlay = document.getElementById('custom-alert-overlay');
+            const customAlertMessage = document.getElementById('custom-alert-message');
+            const customAlertCloseButton = document.getElementById('custom-alert-close-button');
+
+            // --- Emergency Button Listener ---
+            if (emergencyButton) {
+                emergencyButton.addEventListener('click', () => {
+                    // Confirmation using standard confirm
+                    if (window.confirm(`هل أنت متأكد من إرسال نداء طوارئ للحاج ${pilgrimName}؟`)) {
+                        // Show custom alert on success
+                        showCustomAlert(`تم ترحيل البلاغ للهلال الأحمر للحاج ${pilgrimName}.`);
+                        console.log(`ACTION: Emergency button clicked for ${pilgrimName}`);
+                        // Note: No need to update isEmergency flag or visuals here as it's a static page
+                    } else {
+                        console.log(`Emergency call cancelled for ${pilgrimName}.`);
+                    }
+                });
+            }
+
+            // --- Toggle Info Listener ---
+            if (toggleInfoButton && additionalDetails) {
+                 toggleInfoButton.addEventListener('click', () => {
+                    const isHidden = additionalDetails.style.display === 'none';
+                    additionalDetails.style.display = isHidden ? 'grid' : 'none';
+                    toggleInfoButton.textContent = isHidden ? 'إخفاء المعلومات الإضافية' : 'المزيد من المعلومات';
+                });
+            }
+
+            // --- Clickable Location ---
+            const coordinatesSpan = document.getElementById('coordinates');
+            if (coordinatesSpan) {
+                const coordsText = coordinatesSpan.textContent.trim();
+                const coordsArray = coordsText.split(/,\s*/); // Split by comma and optional space
+                if (coordsArray.length === 2) {
+                    const lat = parseFloat(coordsArray[0]);
+                    const lon = parseFloat(coordsArray[1]);
+                    if (!isNaN(lat) && !isNaN(lon)) {
+                         const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+                         const link = document.createElement('a');
+                         link.href = mapsUrl;
+                         link.target = '_blank';
+                         link.rel = 'noopener noreferrer';
+                         link.className = 'location-link';
+                         link.textContent = coordsText;
+                         // Replace the span content with the link
+                         coordinatesSpan.innerHTML = ''; // Clear existing text
+                         coordinatesSpan.appendChild(link);
+                    } else {
+                         console.warn("Could not parse coordinates:", coordsText);
+                    }
+                } else {
+                     console.warn("Coordinates format incorrect:", coordsText);
+                }
+            }
+
+            // --- Custom Alert Functions ---
+            function showCustomAlert(message) {
+                if (!customAlertOverlay || !customAlertMessage) { console.error("Custom alert elements not found!"); alert(message); return; }
+                customAlertMessage.textContent = message;
+                customAlertOverlay.style.display = 'flex';
+            }
+
+            function hideCustomAlert() {
+                if (customAlertOverlay) { customAlertOverlay.style.display = 'none'; }
+            }
+
+            // --- Custom Alert Close Listeners ---
+            if (customAlertCloseButton) { customAlertCloseButton.addEventListener('click', hideCustomAlert); }
+            if (customAlertOverlay) { customAlertOverlay.addEventListener('click', (event) => { if (event.target === customAlertOverlay) { hideCustomAlert(); } }); }
+
+        }); // End DOMContentLoaded
+    </script>
+
 </body>
 </html>
